@@ -43,8 +43,8 @@ def commitRecord(ip):
         "proxied": config["cloudflare"]["proxied"]
     }
 
-    list = cf_api(
-        f"zones/{config['cloudflare']['zone_id']}/dns_records", "GET")
+    list = cf_api("zones/" + config['cloudflare']
+                  ['zone_id'] + "/dns_records", "GET")
 
     for r in list["result"]:
         if (r["type"] == ip["type"] and r["name"] == config["cloudflare"]["subdomain"]):
@@ -52,10 +52,10 @@ def commitRecord(ip):
 
     if(exists == False):
         response = cf_api(
-            f"zones/{config['cloudflare']['zone_id']}/dns_records", "POST", {}, record)
+            "zones/" + config['cloudflare']['zone_id'] + "/dns_records", "POST", {}, record)
     else:
         response = cf_api(
-            f"zones/{config['cloudflare']['zone_id']}/dns_records/{exists}", "PUT", {}, record)
+            "zones/" + config['cloudflare']['zone_id'] + "/dns_records/" + exists, "PUT", {}, record)
 
     print(response)
     return True
@@ -70,10 +70,10 @@ def cf_api(endpoint, method, headers={}, data=False):
 
     if(data == False):
         response = requests.request(
-            method, f"https://api.cloudflare.com/client/v4/{endpoint}", headers=headers)
+            method, "https://api.cloudflare.com/client/v4/" + endpoint, headers=headers)
     else:
         response = requests.request(
-            method, f"https://api.cloudflare.com/client/v4/{endpoint}", headers=headers, json=data)
+            method, "https://api.cloudflare.com/client/v4/" + endpoint, headers=headers, json=data)
 
     return response.json()
 
