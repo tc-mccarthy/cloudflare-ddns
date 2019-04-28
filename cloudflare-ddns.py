@@ -1,5 +1,12 @@
 import requests
 import json
+import sys
+
+version = float(str(sys.version_info[0]) + "." + str(sys.version_info[1]))
+
+
+if(version < 3.5):
+    raise Exception("This script requires Python 3.5+")
 
 with open("./config.json") as config_file:
     config = json.loads(config_file.read())
