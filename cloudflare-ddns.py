@@ -36,28 +36,28 @@ def getIPs():
 def commitRecord(ip):
     exists = False
 
-    record = {
-        "type": ip["type"],
-        "name": config["cloudflare"]["subdomain"],
-        "content": ip["ip"],
-        "proxied": config["cloudflare"]["proxied"]
-    }
+    for(c in config["cloudflare"]):
+        record = {
+            "type": ip["type"],
+            "name": c["subdomain"],
+            "content": ip["ip"],
+            "proxied": c["proxied"]
+        }
 
-    list = cf_api("zones/" + config['cloudflare']
-                  ['zone_id'] + "/dns_records", "GET")
+        list = cf_api("zones/" + c['zone_id'] + "/dns_records", "GET")
 
-    for r in list["result"]:
-        if (r["type"] == ip["type"] and r["name"] == config["cloudflare"]["subdomain"]):
-            exists = r["id"]
+        for r in list["result"]:
+            if (r["type"] == ip["type"] and r["name"] == c["subdomain"]):
+                exists = r["id"]
 
-    if(exists == False):
-        response = cf_api(
-            "zones/" + config['cloudflare']['zone_id'] + "/dns_records", "POST", {}, record)
-    else:
-        response = cf_api(
-            "zones/" + config['cloudflare']['zone_id'] + "/dns_records/" + exists, "PUT", {}, record)
+        if(exists == False):
+            response = cf_api(
+                "zones/" + c['zone_id'] + "/dns_records", "POST", {}, record)
+        else:
+            response = cf_api(
+                "zones/" + c['zone_id'] + "/dns_records/" + exists, "PUT", {}, record)
+        print(response)
 
-    print(response)
     return True
 
 
