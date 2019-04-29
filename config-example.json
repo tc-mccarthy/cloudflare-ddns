@@ -1,10 +1,10 @@
 {
-  "cloudflare": {
+  "cloudflare": [{
     "api_key": "",
     "account_id": "",
     "account_email": "",
     "zone_id": "",
     "subdomain": "",
     "proxied": false
-  }
+  }]
 }

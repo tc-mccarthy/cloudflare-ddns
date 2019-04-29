@@ -36,15 +36,15 @@ def getIPs():
 def commitRecord(ip):
     exists = False
 
-    for(c in config["cloudflare"]):
-        record = {
+    for c in config["cloudflare"]):
+        record={
             "type": ip["type"],
             "name": c["subdomain"],
             "content": ip["ip"],
             "proxied": c["proxied"]
         }
 
-        list = cf_api("zones/" + c['zone_id'] + "/dns_records", "GET")
+        list = cf_api("zones/" + c['zone_id'] + "/dns_records", "GET", c)
 
         for r in list["result"]:
             if (r["type"] == ip["type"] and r["name"] == c["subdomain"]):
@@ -52,19 +52,19 @@ def commitRecord(ip):
 
         if(exists == False):
             response = cf_api(
-                "zones/" + c['zone_id'] + "/dns_records", "POST", {}, record)
+                "zones/" + c['zone_id'] + "/dns_records", "POST", c, {}, record)
         else:
             response = cf_api(
-                "zones/" + c['zone_id'] + "/dns_records/" + exists, "PUT", {}, record)
+                "zones/" + c['zone_id'] + "/dns_records/" + exists, "PUT", c, {}, record)
         print(response)
 
     return True
 
 
-def cf_api(endpoint, method, headers={}, data=False):
+def cf_api(endpoint, method, config, headers={}, data=False):
     headers = {
-        "X-Auth-Email": config['cloudflare']['account_email'],
-        "X-Auth-Key": config['cloudflare']['api_key'],
+        "X-Auth-Email": config['account_email'],
+        "X-Auth-Key": config['api_key'],
         **headers
     }
 
