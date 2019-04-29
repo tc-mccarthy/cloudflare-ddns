@@ -36,8 +36,8 @@ def getIPs():
 def commitRecord(ip):
     exists = False
 
-    for c in config["cloudflare"]):
-        record={
+    for c in config["cloudflare"]:
+        record = {
             "type": ip["type"],
             "name": c["subdomain"],
             "content": ip["ip"],
